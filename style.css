@@ -1,0 +1,163 @@
+/* Google Fonts에서 Roboto 폰트 로드 */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif; /* 더 현대적인 폰트 */
+    background-color: #e6f7ff; /* 신선한 느낌을 위한 밝은 배경 */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 배치 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    align-items: center; /* 기본적으로 중앙 정렬 */
+    padding: 20px;
+    background-color: #007bff; /* 헤더의 기본 색상 */
+    color: white;
+    position: fixed; /* 헤더를 고정 위치로 설정 */
+    top: 0; /* 화면 상단에 고정 */
+    left: 0;
+    right: 0;
+    z-index: 1; /* 다른 요소들보다 위에 위치하도록 설정 */
+    transition: top 0.3s; /* 부드러운 전환 효과 */
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    text-align: left; /* 왼쪽 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+    padding-left: 20px; /* 왼쪽 여백 추가 */
+}
+
+nav, .search-bar {
+    width: 100%; /* 전체 너비 사용 */
+    display: flex;
+    justify-content: center; /* 중앙 정렬 유지 */
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0; /* 여백 조정 */
+}
+
+header.scrolled {
+    position: relative; /* 스크롤 후 일반 흐름으로 변경 */
+    top: -100px; /* 헤더가 사라지는 효과 */
+}
+
+
+header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    text-align: center;
+}
+
+nav {
+    margin-left: auto;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav a {
+    color: white; /* 대비를 위한 흰색 텍스트 */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.search-bar input[type="text"] {
+    width: 250px; /* 더 세련된 모양을 위한 조정 */
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+}
+
+.search-bar button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: #0056b3; /* 대비를 위한 약간 어두운 색상 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #004494;
+}
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    flex-wrap: wrap; /* 반응형 디자인을 보장 */
+}
+
+.box {
+    width: 30%;
+    padding: 20px;
+    border: none; /* 더 깔끔한 모양을 위한 테두리 제거 */
+    border-radius: 10px; /* 더 둥근 모서리 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    text-align: center;
+    margin-bottom: 20px; /* 박스 사이의 간격 */
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #007bff; /* 헤더 색상과 동일 */
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+#map {
+    width: 100%; /* 너비를 100%로 설정 */
+    height: 0; /* 초기 높이를 0으로 설정 */
+    padding-bottom: 56.25%; /* 비율: 16:9 (높이/너비 비율) */
+    position: relative; /* 부모로 설정 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+#map > iframe {
+    position: absolute; /* 자식 요소를 절대 위치로 설정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* 부모 요소의 높이에 맞춤 */
+    border: none; /* 테두리 제거 */
+}
+
+@media (max-width: 768px) {
+    #map {
+        padding-bottom: 75%; /* 높이를 더 크게 설정 */
+    }
+}

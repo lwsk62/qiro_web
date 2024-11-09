@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QiRo</title>
+    <link rel="stylesheet" href="style.css"> <!-- style.css 파일 포함 -->
+    <link rel="stylesheet" href="stock.css"> <!-- 주식 CSS 파일 포함 -->
+    <link rel="stylesheet" href="weather.css"> <!-- 날씨 CSS 파일 포함 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAni6uo_uXp7bHHQd8oSQTpAjbg_JriYLY&libraries=places&callback=initMap" async defer></script>
+</head>
+<body>
+    <header id="header">
+        <h1><a href="index.html">QiRo</a></h1>
+        <nav>
+            <ul>
+                <li><a href="blog.html">블로그</a></li>
+                <li><a href="message_board.html">게시판</a></li>
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <form action="https://www.google.com/search" method="get">
+                <input type="text" name="q" placeholder="검색어를 입력하세요">
+                <button type="submit">검색</button>
+            </form>
+        </div>
+    </header>
+    
+    <main>
+        <div class="content">
+            <div class="box" id="weather-box">
+                <h3>날씨 검색</h3>
+                <input id="city-input" type="text" placeholder="도시 입력">
+                <button id="weather-search-button">검색</button>
+                <button id="current-weather-button">현위치</button>
+                <div id="weather-info"></div>
+            </div>
+            <div class="box" id="map-box">
+                <h3>지도</h3>
+                <input id="search-box" type="text" placeholder="검색할 지역 입력">
+                <button id="locateButton">현위치</button>
+                <div id="map"></div> <!-- 스타일을 CSS로 이동 -->
+            </div>
+            
+            <div class="box" id="stock-box">
+                <h3>주식 정보</h3>
+                <div class="stock-info">
+                    <div class="stock-header">
+                        <div class="stock-details">
+                            <h2 id="stock-name">Apple Inc. (AAPL)</h2>
+                            <h2 id="stock-price">111.81 USD</h2>
+                            <p id="stock-change">+1.73 (+1.57%)</p>
+                        </div>
+                    </div>
+                    <div class="stock-stats">
+                        <div class="stat-item">
+                            <span>시가</span> <!-- Open -->
+                            <span id="open-price">112.68</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>전일 종가</span> <!-- Prev Close -->
+                            <span id="prev-close">110.08</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>거래량</span> <!-- Volume -->
+                            <span id="volume">183,055,376</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>시가총액</span> <!-- Market Cap -->
+                            <span id="market-cap">1.883T</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>일일 범위</span> <!-- Day Range -->
+                            <span id="day-range">109.16 - 112.86</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>52주 범위</span> <!-- 52 Week Range -->
+                            <span id="52-week-range">53.15 - 137.98</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>API 제공: <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, <a href="https://maps.googleapis.com" target="_blank">Google Maps</a></p>
+    </footer>
+
+    <!-- JavaScript 코드 -->
+    <script>
+        window.onload = function() {
+            const header = document.getElementById("header");
+            const main = document.querySelector("main");
+            const headerHeight = header.offsetHeight; // 헤더의 높이를 가져옴
+            main.style.marginTop = (headerHeight + 25) + "px"; // 바디의 여백을 헤더 높이에 맞춤 (10px 추가)
+        };
+
+        window.onscroll = function() {
+            const header = document.getElementById("header");
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                header.style.top = "-100px"; // 헤더를 숨김
+            } else {
+                header.style.top = "0"; // 헤더를 보임
+            }
+        };
+    </script>
+
+    <!-- 다른 JavaScript 파일 포함 -->
+    <script src="weather.js"></script>
+    <script src="map.js"></script>
+    <script src="stock.js"></script>
+</body>
+</html>

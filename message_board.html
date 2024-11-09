@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="message_board.css"> <!-- 스타일 시트 -->
+    <style>
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .post-content {
+            display: none;
+        }
+
+        .delete-button {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Qiro</a></li>
+                <li><a href="blog.html">블로그</a></li>
+                <li><a href="stock.html">주식</a></li>
+            </ul>
+        </nav>
+        <h1>게시판</h1>
+    </header>
+    <main class="main">
+        <div id="board-box">
+            <form id="post-form">
+                <input type="text" id="post-title" placeholder="제목" required>
+                <textarea id="post-content" placeholder="내용" required></textarea>
+                <input type="file" id="post-file" accept="image/*"> <!-- 파일 입력 추가 -->
+                <button type="submit">게시</button>
+            </form>
+            <div id="posts"></div>
+        </div>
+    </main>
+    <footer>
+        <p>출처: <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a></p>
+    </footer>
+
+    <script>
+        document.getElementById('post-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+            const fileInput = document.getElementById('post-file');
+            let fileURL = '';
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    fileURL = e.target.result;
+                    savePost(title, content, fileURL);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                savePost(title, content, null);
+            }
+        });
+
+        function savePost(title, content, fileURL) {
+            const post = {
+                title: title,
+                content: content,
+                date: new Date().toLocaleString(),
+                file: fileURL
+            };
+
+            let posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.push(post);
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            document.getElementById('post-form').reset();
+            displayPosts();
+        }
+
+        function displayPosts() {
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            const postList = document.getElementById('posts');
+            postList.innerHTML = '';
+
+            posts.forEach((post, index) => {
+                const postDiv = document.createElement('div');
+                postDiv.classList.add('post');
+
+                postDiv.innerHTML = `
+                    <h4 class="post-title" onclick="toggleContent(this)">${post.title}</h4>
+                    <div class="post-content">${post.content}</div>
+                    ${post.file ? `<img src="${post.file}" alt="첨부 파일" style="max-width: 100%;">` : ''}
+                    <p><small>${post.date}</small></p>
+                    <span class="delete-button" onclick="deletePost(${index})">삭제</span>
+                    <hr>
+                `;
+                postList.appendChild(postDiv);
+            });
+        }
+
+        function toggleContent(element) {
+            const contentDiv = element.nextElementSibling;
+            contentDiv.style.display = contentDiv.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function deletePost(index) {
+            let posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.splice(index, 1);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            displayPosts();
+        }
+
+        window.onload = displayPosts;
+    </script>
+</body>
+</html>

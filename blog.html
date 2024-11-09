@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 작성</title>
+    <link rel="stylesheet" href="blog.css"> <!-- 블로그 스타일 -->
+</head>
+<body>
+    <header>
+        <h1>블로그</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Qiro</a></li>
+                <li><a href="message_board.html">게시판</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="main">
+        <div class="blog-container">
+            <h2>블로그 작성</h2>
+            <form id="blog-form">
+                <div>
+                    <label for="title">제목:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div>
+                    <label for="content">내용:</label>
+                    <textarea id="content" name="content" rows="10" required></textarea>
+                </div>
+                <div>
+                    <label for="image">이미지 업로드:</label>
+                    <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+                </div>
+                <img id="image-preview" src="" alt="이미지 미리보기" style="display: none; max-width: 100%; margin-top: 10px;">
+                <button type="submit">작성하기</button>
+            </form>
+        </div>
+
+        <div id="post-list" class="post-container"></div> <!-- 포스트가 추가될 위치 -->
+    </main>
+    
+    <footer>
+        <p>출처: <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a></p>
+        <p>API 제공: <a href="https://newsapi.org" target="_blank">NewsAPI</a></p>
+    </footer>
+
+    <script>
+        // JavaScript 코드는 이전과 동일하게 유지
+    </script>
+</body>
+</html>
+
+
+    <script>
+        // 폼 제출 이벤트 리스너
+        document.getElementById('blog-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // 기본 제출 동작 방지
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const image = document.getElementById('image').files[0]; // 업로드된 이미지 파일
+
+            // 블로그 포스트 객체 생성
+            const blogPost = {
+                title: title,
+                content: content,
+                date: new Date().toLocaleString(), // 현재 날짜와 시간
+                comments: [], // 댓글 배열 추가
+                image: image ? URL.createObjectURL(image) : '' // 이미지 URL 추가
+            };
+
+            // 로컬 스토리지에 저장
+            let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            posts.push(blogPost);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+
+            alert('포스트가 저장되었습니다!');
+
+            // 폼 초기화
+            document.getElementById('blog-form').reset();
+            document.getElementById('image-preview').style.display = 'none'; // 미리보기 초기화
+
+            // 저장된 포스트 표시
+            displayPosts();
+        });
+
+        // 저장된 포스트를 화면에 표시하는 함수
+        function displayPosts() {
+            const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            const postList = document.getElementById('post-list');
+            postList.innerHTML = ''; // 초기화
+
+            posts.forEach((post, index) => {
+                const postDiv = document.createElement('div');
+                postDiv.classList.add('post');
+
+                postDiv.innerHTML = `
+                    <h3 class="post-title" onclick="toggleContent(this)">${post.title}</h3>
+                    ${post.image ? `<img src="${post.image}" alt="포스트 이미지" style="max-width: 100%; margin-top: 10px;">` : ''}
+                    <div class="post-content">${post.content}</div>
+                    <p><small>${post.date}</small></p>
+                    <span class="delete-button" onclick="deletePost(${index})">삭제</span>
+                    <hr>
+                    <div class="comment-section">
+                        <h4>댓글</h4>
+                        <form id="comment-form-${index}" onsubmit="addComment(event, ${index})">
+                            <input type="text" placeholder="댓글을 입력하세요" required>
+                            <button type="submit">댓글 달기</button>
+                        </form>
+                        <div class="comments-list" id="comments-list-${index}"></div>
+                    </div>
+                `;
+                postList.appendChild(postDiv);
+                displayComments(post.comments, index);
+            });
+        }
+
+        // 댓글 추가 함수
+        function addComment(event, postIndex) {
+            event.preventDefault(); // 기본 제출 동작 방지
+            const commentInput = event.target.querySelector('input');
+            const comment = commentInput.value;
+
+            // 댓글 추가
+            let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            posts[postIndex].comments.push({
+                content: comment,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+
+            commentInput.value = ''; // 입력 필드 초기화
+            
+            // 댓글 목록 다시 표시
+            displayComments(posts[postIndex].comments, postIndex);
+        }
+
+        // 댓글 표시 함수
+        function displayComments(comments, postIndex) {
+            const commentsList = document.getElementById(`comments-list-${postIndex}`);
+            commentsList.innerHTML = ''; // 초기화
+
+            comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.classList.add('comment');
+                commentDiv.innerHTML = `<p>${comment.content} <small>${comment.date}</small></p>`;
+                commentsList.appendChild(commentDiv);
+            });
+        }
+
+        // 제목 클릭 시 내용 보이기/숨기기
+        function toggleContent(element) {
+            const contentDiv = element.nextElementSibling; // 내용 div 선택
+            contentDiv.style.display = contentDiv.style.display === 'block' ? 'none' : 'block'; // 토글
+        }
+
+        // 포스트 삭제 기능
+        function deletePost(index) {
+            let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+            posts.splice(index, 1); // 해당 인덱스의 포스트 삭제
+            localStorage.setItem('blogPosts', JSON.stringify(posts)); // 업데이트된 포스트 저장
+            displayPosts(); // 포스트 목록 다시 표시
+        }
+
+        // 페이지 로드 시 저장된 포스트 표시
+        window.onload = displayPosts;
+
+        // 이미지 미리보기 함수
+        function previewImage(event) {
+            const imagePreview = document.getElementById('image-preview');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // 미리보기 표시
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '';
+                imagePreview.style.display = 'none'; // 미리보기 숨김
+            }
+        }
+    </script>
+</body>
+</html>

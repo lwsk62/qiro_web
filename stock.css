@@ -1,0 +1,44 @@
+#stock-box {
+    background-color: #f9f9f9; /* 배경 색상 */
+    padding: 20px; /* 여백 */
+    border-radius: 8px; /* 모서리 둥글기 */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    max-width: 800px; /* 최대 너비 설정 */
+    margin: 20px auto; /* 중앙 정렬 */
+}
+
+.stock-info {
+    margin-bottom: 20px; /* 주식 정보와 차트 간의 간격 */
+}
+
+.stock-header {
+    display: flex; /* flexbox 사용 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.stock-details {
+    display: flex; /* flexbox 사용 */
+    flex-direction: column; /* 세로 방향으로 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+
+.stock-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 나누기 */
+    gap: 10px; /* 간격 */
+}
+
+.stat-item {
+    background-color: #ffffff; /* 각 통계 항목 배경색 */
+    padding: 10px; /* 내부 여백 */
+    border-radius: 5px; /* 모서리 둥글기 */
+}
+
+#stockChart {
+    width: 100%; /* 부모 요소에 맞춰 너비 조정 */
+    height: 400px; /* 고정 높이 설정 */
+    margin-top: 20px; /* 차트 위쪽 여백 */
+}
