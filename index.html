@@ -11,22 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAni6uo_uXp7bHHQd8oSQTpAjbg_JriYLY&libraries=places&callback=initMap" async defer></script>
-    <script>
-        // 브라우저 특정 키 입력 막기
-        document.addEventListener('keydown', function(e) {
-            // F12 키 (keycode 123) 입력 막기
-            if (e.key === 'F12') {
-                e.preventDefault();
-                return false;
-            }
-
-            // Ctrl + Shift + I 입력 막기 (keycode 73는 'I'의 keycode)
-            if (e.ctrlKey && e.shiftKey && (e.key === 'I')) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    </script>
+    
 </head>
 <body>
     <header id="header">
@@ -125,7 +110,22 @@
             }
         };
     </script>
+    <script>
+        // 브라우저 특정 키 입력 막기
+        document.addEventListener('keydown', function(e) {
+            // F12 키 (keycode 123) 입력 막기
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
 
+            // Ctrl + Shift + I 입력 막기 (keycode 73는 'I'의 keycode)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
     <!-- 다른 JavaScript 파일 포함 -->
     <script src="qiro_sub/weather.js"></script>
     <script src="qiro_sub/map.js"></script>
